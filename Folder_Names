@@ -1,0 +1,50 @@
+import os
+import xlrd
+
+
+def rename_Folders(filename, path):
+
+    workbook = xlrd.open_workbook(filename)
+    sheet = workbook.sheet_by_index(0)
+    num_rows = sheet.nrows
+    num_cols = sheet.ncols
+    curr_row = 1
+    original_col = 1
+    mrn_col = 0
+
+    # for col in range(1, num_cols + 1):
+    #     print ("col: ", col, " ", sheet.cell_value(1, col))
+    #     if sheet.cell_value(1, col) == 'Original':
+    #         mrn_col = col - 1
+    #         print ("MRN COL: ", mrn_col)
+    #     if sheet.cell_value(1, col) == 'Case':
+    #         original_col = col - 1
+    #         print ("ORIG_COL: ", original_col)
+
+    # creates an array to store all the rows
+    original_names = []
+    new_names = []
+
+    print("Original col: ", original_col)
+    print("MRN col: ", mrn_col)
+
+    while curr_row < num_rows:
+        row = sheet.row(curr_row)
+        print("ROW: ", row)
+        # original_names.append('Case_' + str(row[mrn_col].split(':')[1]))
+        original_names.append('Case_' + str(int(row[original_col].value)))
+        new_names.append(str(int(row[mrn_col].value)))
+        curr_row += 1
+
+    print("Original_names: ", original_names)
+    print ("New_names: ", new_names)
+
+    os.chdir(path)
+
+    for idx in range(0, num_rows - 1):
+        os.rename(original_names[idx], new_names[idx])
+
+
+filename = 'Test File.xlsx'
+
+rename_Folders(filename, '/Users/rcgranberry/Documents')
