@@ -11,12 +11,12 @@ def rename_Folders(filename, path):
     original_col = 2
     mrn_col = 1
 
-    # for col in range(1, num_cols + 1):
+    # for col in range(1, sheet.ncols + 1):
     #     print ("col: ", col, " ", sheet.cell_value(1, col))
-    #     if sheet.cell_value(1, col) == 'Original':
+    #     if sheet['A' + str(col)].value == 'Original':
     #         mrn_col = col - 1
     #         print ("MRN COL: ", mrn_col)
-    #     if sheet.cell_value(1, col) == 'Case':
+    #     if sheet['A' + str(col)].value == 'Case':
     #         original_col = col - 1
     #         print ("ORIG_COL: ", original_col)
 
@@ -28,18 +28,13 @@ def rename_Folders(filename, path):
         row = sheet.row(curr_row)
         # original_names.append('Case_' + str(int(row[original_col].value)))
         # new_names.append(str(int(row[mrn_col].value)))
-        original_names.append(str(int(row[original_col].value)))
+        original_names.append('Case_' + str(int(row[original_col].value)))
         new_names.append(str(int(row[mrn_col].value)))
         curr_row += 1
-
-    print ("Current dir: ", os.getcwd())
 
     os.chdir(path)
 
     dirlist = [item for item in os.listdir(path) if os.path.isdir(os.path.join(path, item))]
-
-    print ("Size dirlist", len(dirlist))
-    print ("dirlist", dirlist)
 
     for folder in dirlist:
         if folder in new_names:
@@ -62,7 +57,7 @@ def rename_Folders(filename, path):
 
 
 filename = 'Test File.xlsx'
-path = '/Users/rcgranberry/Documents/test'
+path = '/Volumes/radonc/Team Share/Robin/Test'
 
 
 rename_Folders(filename, path)
