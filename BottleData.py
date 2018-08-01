@@ -4,23 +4,14 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 
+
 def bottle_data(sheet_names, start_month, start_day, end_month, end_day):
     # open the appropriate document and access the correct sheets
-
     root = tk.Tk()
     root.withdraw()
 
-    pre_doc_name1 = filedialog.askopenfilename()
-    split_doc1 = pre_doc_name1.split('/')
-    doc_name1 = split_doc1[-1]
-    os.chdir("/".join(split_doc1[:len(split_doc1)-1]))
-    doc = openpyxl.load_workbook(doc_name1)
-
-    pre_doc_name2 = filedialog.askopenfilename()
-    split_doc2 = pre_doc_name2.split('/')
-    doc_name2 = split_doc2[-1]
-    os.chdir("/".join(split_doc2[:len(split_doc2)-1]))
-    doc2 = openpyxl.load_workbook(doc_name2, keep_vba = False)
+    doc, doc_name1 = find_sheet()
+    doc2, doc_name2 = find_sheet()
 
     sheet_1 = doc[sheet_names[0]]
     sheet_2 = doc2[sheet_names[1]]
@@ -106,15 +97,25 @@ def bottle_data(sheet_names, start_month, start_day, end_month, end_day):
 def add_values(set, row_num, letter1, letter2, sheet_2):
     # adds the values calculated into the second spreadsheet
     if set[2] == "Before":
-        idx = row_num + 1
-        for i in range(3, len(set) - 1):
-            sheet_2[letter1 + str(idx)].value = set[i]
-            idx += 1
+        insert_values(set, row_num, letter1, sheet_2)
     else:
-        idx = row_num + 1
-        for i in range(3, len(set) - 1):
-            sheet_2[letter2 + str(idx)].value = set[i]
-            idx += 1
+        insert_values(set, row_num, letter2, sheet_2)
+
+
+def insert_values(set, row_num, letter, sheet_2):
+    idx = row_num + 1
+    for i in range(3, len(set) - 1):
+        sheet_2[letter + str(idx)].value = set[i]
+        idx += 1
+
+
+def find_sheet():
+    pre_doc_name1 = filedialog.askopenfilename()
+    split_doc1 = pre_doc_name1.split('/')
+    doc_name1 = split_doc1[-1]
+    os.chdir("/".join(split_doc1[:len(split_doc1) - 1]))
+    doc = openpyxl.load_workbook(doc_name1, keep_vba = False)
+    return doc, doc_name1
 
 
 bottle_data(["Bottle Weights", "Drinking Data"], "7", "18", "7", "20")
